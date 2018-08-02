@@ -7,6 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class HelloController {
+    @RequestMapping(value = "/")
+    public String homePage() {
+        return "Hello Spring Boot!";
+    }
+    
     @RequestMapping(value = "/hello")
     public String sayHello(HttpServletRequest request) {
         String pin = request.getParameter("pin");
