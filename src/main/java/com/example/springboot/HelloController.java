@@ -9,9 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 public class HelloController {
     @RequestMapping(value = "/")
     public String homePage() {
-        return "Hello Spring Boot!";
+        return "Hello Spring Boot! Use WebHook!";
     }
-    
+
     @RequestMapping(value = "/hello")
     public String sayHello(HttpServletRequest request) {
         String pin = request.getParameter("pin");
