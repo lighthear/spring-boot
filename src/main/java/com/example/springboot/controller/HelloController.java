@@ -31,9 +31,9 @@ public class HelloController {
     }
 
     @ResponseBody
-    @RequestMapping(value = {"/sever", "/fz/sever"})
+    @RequestMapping(value = {"/server", "/fz/server"})
     public String transUrl(HttpServletRequest request) {
-        String hostPath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
+        String hostPath = request.getScheme() + "://" + request.getServerName();
         String item_id = request.getParameter("item_id");
         String baiduFlag = request.getParameter("baidu");
         String result = transUrlService.getTransUrl(hostPath, item_id, baiduFlag);

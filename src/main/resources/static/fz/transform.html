@@ -75,7 +75,7 @@
               }else {
               	baidu = 0;
               }
-              $.getJSON("sever",{item_id: shortStr[1],baidu: baidu},function (json) {
+              $.getJSON("server",{item_id: shortStr[1],baidu: baidu},function (json) {
                   url_short = json.urls[0].url_short;
                   url_long = json.urls[0].url_long;
                   if($('#shortUrl').is(":checked")){
