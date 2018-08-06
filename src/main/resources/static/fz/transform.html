@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  	<meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>转换</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <style type="text/css">
+      body {
+        padding-top: 10rem;
+        width: 100%
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-8 col-sm-8">
+          <textarea id="before" name="before" class="form-control" rows="5"></textarea>
+        </div>
+        <div class="col-xs-4 col-sm-4">
+          <button id="transform" type="button" class="btn btn-primary btn-lg btn-block">转换</button>
+        </div>
+      </div>
+
+      <div class="checkbox row">
+        <div class="col-xs-5 col-sm-2">
+          <label>
+            <input id="shortUrl" name="shortUrl" type="checkbox" value="true" checked="checked"> 使用短链接
+          </label>
+        </div>
+        <div class="col-xs-7 col-sm-10">
+          <label>
+            <input id="baidu" name="baidu" type="checkbox" value="true" checked="checked"> 使用百度翻译
+          </label>
+        </div>   
+      </div>
+
+      <div class="row">
+        <div class="col-xs-8 col-sm-8">
+          <textarea id="copy-target" name="after" class="form-control" rows="5" readonly="readonly"></textarea>
+        </div>
+        <div class="col-xs-4 col-sm-4">
+          <button id="copy-btn" type="button" class="btn btn-danger btn-lg btn-block" data-clipboard-target="#copy-target">点我复制</button>
+        </div>
+      </div>
+    </div>
+    
+  <script src="js/jquery-3.2.1.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/clipboard.min.js"></script>
+  <script>
+      var url_short;
+      $(document).ready(function() {
+          $('#transform').click(function () {
+              var longStr = $('#before').val();
+              var shortStr = longStr.split(/￥|《|€/);
+              var baidu = 0;
+              var date=new Date();
+							var second=date.getSeconds();
+							var minute=date.getMinutes();
+							var symNum = 5;
+							var sym1 = minute%symNum;							
+							var sym2 = second%symNum;
+							var symArray = new Array();
+							symArray[0] = "💰";
+							symArray[1] = "🎵";
+							symArray[2] = "📲";					
+              symArray[3] = "🔑";  
+              symArray[4] = "✔";
+              if($('#baidu').is(":checked")){
+              	baidu = 1;
+              }else {
+              	baidu = 0;
+              }
+              $.getJSON("sever",{item_id: shortStr[1],baidu: baidu},function (json) {
+                  url_short = json.urls[0].url_short;
+                  url_long = json.urls[0].url_long;
+                  if($('#shortUrl').is(":checked")){
+                      $('#copy-target').val(symArray[sym1] + shortStr[1] + symArray[sym2] + "\n"
+                              + url_short + "\n"
+                              + "↑长按复制消息打开手/机陶堡，或点击链接复职陶口另。");
+                  }else {
+                      $('#copy-target').val(symArray[sym1] + shortStr[1] + symArray[sym1] + "\n"
+                              +url_long +"\n"
+                              + "↑长按复制消息打开手/机陶堡，或点击链接复职陶口另。");
+                  }
+              });
+          });
+      });
+  </script>
+  <script>
+      var clipboard = new Clipboard('#copy-btn');
+      var interval = undefined;
+      clipboard.on('success', function (e) {
+          //          var btnTitle = $('#copy-btn').html();
+          $('#copy-btn').html("已复制");
+          if (interval != undefined) {
+              clearInterval(interval);
+          }
+
+          interval = setInterval(function () {
+              $('#copy-btn').html('点我复制');
+          }, 3000);
+      });
+      clipboard.on('error', function (e) {
+      });
+  </script>
+
+
+  </body>
+</html>
